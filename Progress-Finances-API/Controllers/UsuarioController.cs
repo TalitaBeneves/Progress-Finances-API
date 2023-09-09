@@ -119,7 +119,11 @@ namespace Progress_Finances_API.Controllers
                 if (usuario == null) return BadRequest("Usuário não encontrado");
 
                 var file = Request.Form.Files[0];
-                if (usuario.ImagemUrl != null || usuario.ImagemUrl == null)
+                if (usuario.ImagemUrl == null)
+                {
+                    usuario.ImagemUrl = await SaveImage(file);
+                }
+                else
                 {
                     await DeleteImage(usuario.ImagemUrl);
                     usuario.ImagemUrl = await SaveImage(file);
