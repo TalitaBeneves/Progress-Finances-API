@@ -11,7 +11,7 @@ namespace Progress_Finances_API.Model
         public int Nota { get; set; }
         public decimal? SugestaoInvestimento { get; set; }
         public string LocalAlocado { get; set; }
-        public int QtdAtivos { get; set; }
+        public decimal QtdAtivos { get; set; }
         public decimal? ValorTotalInvestido { get; set; }
         public decimal ValorAtualDoAtivo { get; set; }
         public TipoAtivo Tipo { get; set; }
