@@ -21,7 +21,7 @@ namespace Progress_Finances_API.Controllers
         [HttpGet("{idUsuario}")]
         public async Task<ActionResult> ListarMetaInvestimento(int idUsuario)
         {
-            var listMeta = await _dc.meta.Where(id => id.Usuario_id == idUsuario).ToListAsync();
+            var listMeta = await _dc.meta.Where(id => id.IdUsuario == idUsuario).ToListAsync();
 
             if (listMeta == null) return BadRequest("Meta não encontrada");
 
@@ -37,19 +37,20 @@ namespace Progress_Finances_API.Controllers
             if (totalPorcentagem > 100) return BadRequest("A soma das porcentagens é maior que 100%");
 
 
-            var verificaMeta = await _dc.meta.Where(id => id.Usuario_id == meta.Usuario_id).FirstOrDefaultAsync();
+            var verificaMeta = await _dc.meta.Where(id => id.IdUsuario == meta.IdUsuario).FirstOrDefaultAsync();
 
             if (verificaMeta == null)
             {
                 _dc.meta.Add(meta);
                 await _dc.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(ListarMetaInvestimento), new { id = meta.Meta_id }, meta);
+                return CreatedAtAction(nameof(ListarMetaInvestimento), new { id = meta.IdMeta }, meta);
             }
             else
             {
                 verificaMeta.Acoes = meta.Acoes;
                 verificaMeta.Fixa = meta.Fixa;
+                verificaMeta.Fiis = meta.Fiis;
                 verificaMeta.Nome = meta.Nome;
 
 

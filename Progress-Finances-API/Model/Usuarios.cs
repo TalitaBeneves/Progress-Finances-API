@@ -5,7 +5,7 @@ namespace Progress_Finances_API.Model
     public class Usuarios
     {
         [Key]
-        public int Usuario_Id { get; set; }
+        public int IdUsuario { get; set; }
         public string Nome { get; set; }
         public string Senha { get; set; }
         public string Email { get; set; }
@@ -31,7 +31,7 @@ namespace Progress_Finances_API.Model
     public class AtualizaUsuairo
     {
         [Key]
-        public int Usuario_Id { get; set; }
+        public int IdUsuario { get; set; }
         public string Nome { get; set; }
         public string SenhaAtual { get; set; }
         public string NovaSenha { get; set; }

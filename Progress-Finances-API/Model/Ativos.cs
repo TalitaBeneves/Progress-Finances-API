@@ -5,8 +5,8 @@ namespace Progress_Finances_API.Model
     public class Ativos
     {
         [Key]
-        public int ativo_id { get; set; }
-        public int usuario_id { get; set; }
+        public int IdAtivo { get; set; }
+        public int IdUsuario { get; set; }
         public string Nome { get; set; }
         public int Nota { get; set; }
         public decimal? SugestaoInvestimento { get; set; }

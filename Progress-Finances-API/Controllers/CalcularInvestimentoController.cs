@@ -21,8 +21,8 @@ namespace Progress_Finances_API.Controllers
         [HttpGet] //500
         public async Task<ActionResult> CalcularInvestimento([FromQuery] int valorInvestimento, [FromQuery] int idUsuario)
         {
-            var listAtivos = await _dc.ativos.Where(id => id.usuario_id == idUsuario && id.ChekedParaCalculo == true).ToListAsync();
-            var metaInvestimento = await _dc.meta.Where(id => id.Usuario_id == idUsuario).FirstOrDefaultAsync();
+            var listAtivos = await _dc.ativos.Where(id => id.IdUsuario == idUsuario && id.ChekedParaCalculo == true).ToListAsync();
+            var metaInvestimento = await _dc.meta.Where(id => id.IdUsuario == idUsuario).FirstOrDefaultAsync();
 
             if (listAtivos == null) return BadRequest("Ativos não encontrados");
             if (metaInvestimento == null) return BadRequest("Meta não encontrada");

@@ -25,7 +25,7 @@ namespace Progress_Finances_API.Controllers
 
             if (idUsuario == null) return BadRequest("IdUsuario está null");
 
-            var listAtivos = await _dc.ativos.Where(id => id.usuario_id == idUsuario).ToListAsync();
+            var listAtivos = await _dc.ativos.Where(id => id.IdUsuario == idUsuario).ToListAsync();
 
             if (listAtivos == null) return BadRequest("Dados não encontrados.");
 
@@ -55,7 +55,7 @@ namespace Progress_Finances_API.Controllers
         {
             if (ativo == null) return BadRequest("Ativo está null");
 
-            var request = await _dc.ativos.FirstOrDefaultAsync(i => i.ativo_id == ativo.ativo_id);
+            var request = await _dc.ativos.FirstOrDefaultAsync(i => i.IdAtivo == ativo.IdAtivo);
 
             if (request == null)
                 return BadRequest("Não foi encontrado nenhum ativo com esse id");
@@ -80,7 +80,7 @@ namespace Progress_Finances_API.Controllers
         {
             if (idAtivo == null) return BadRequest("Ativo está null");
 
-            var delet = await _dc.ativos.FirstOrDefaultAsync(i => i.ativo_id == idAtivo);
+            var delet = await _dc.ativos.FirstOrDefaultAsync(i => i.IdAtivo == idAtivo);
             if (delet == null)
                 return BadRequest("Não foi encontrado nenhum ativo com esse id");
             else
@@ -100,7 +100,7 @@ namespace Progress_Finances_API.Controllers
         [HttpPut("naoCalcularInvestimento")]
         public async Task<ActionResult> naoCalcularInvestimento(int IdAtivo, int IdUsuario, bool chekedParaCalcular)
         {
-            var request = await _dc.ativos.FirstOrDefaultAsync(id => id.usuario_id == IdUsuario && id.ativo_id == IdAtivo);
+            var request = await _dc.ativos.FirstOrDefaultAsync(id => id.IdUsuario == IdUsuario && id.IdAtivo == IdAtivo);
 
             if (request == null)
             {

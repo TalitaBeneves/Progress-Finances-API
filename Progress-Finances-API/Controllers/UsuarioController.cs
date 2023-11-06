@@ -22,8 +22,6 @@ namespace Progress_Finances_API.Controllers
         private readonly TokenAuth _token;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public string bucktName = "armazenamento-img-v1";
-
         public UsuarioController(DataContext context, TokenAuth token, IWebHostEnvironment hostEnvironment)
         {
             _dc = context;
@@ -62,7 +60,7 @@ namespace Progress_Finances_API.Controllers
 
                 var response = new Usuarios
                 {
-                    Usuario_Id = usuario.Usuario_Id,
+                    IdUsuario = usuario.IdUsuario,
                     Email = usuario.Email,
                     ImagemUrl = usuario.ImagemUrl,
                     Nome = usuario.Nome,
@@ -83,7 +81,7 @@ namespace Progress_Finances_API.Controllers
         {
             try
             {
-                var usuario = await _dc.usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Usuario_Id == user.Usuario_Id);
+                var usuario = await _dc.usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.IdUsuario == user.IdUsuario);
                 if (usuario == null) throw new InvalidOperationException("Id não encontrado");
 
                 if (!string.IsNullOrEmpty(user.NovaSenha))
@@ -115,7 +113,7 @@ namespace Progress_Finances_API.Controllers
             try
             {
 
-                var usuario = await _dc.usuarios.FirstOrDefaultAsync(u => u.Usuario_Id == idUsuario);
+                var usuario = await _dc.usuarios.FirstOrDefaultAsync(u => u.IdUsuario == idUsuario);
                 if (usuario == null) return BadRequest("Usuário não encontrado");
 
                 var file = Request.Form.Files[0];
@@ -137,7 +135,7 @@ namespace Progress_Finances_API.Controllers
                     Email = usuario.Email,
                     ImagemUrl = usuario.ImagemUrl,
                     Nome = usuario.Nome,
-                    Usuario_Id = usuario.Usuario_Id,
+                    IdUsuario = usuario.IdUsuario,
                     Token = usuario.Token,
                 };
 
@@ -153,70 +151,31 @@ namespace Progress_Finances_API.Controllers
         [NonAction]
         public async Task<string> SaveImage(IFormFile imageFile)
         {
-            try
+            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName)
+                                             .Take(10)
+                                             .ToArray()
+                                        ).Replace(' ', '-');
+
+            imageName = $"{imageName}{DateTime.UtcNow.ToString("yymmssfff")}{Path.GetExtension(imageFile.FileName)}";
+
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images", imageName);
+
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
-                string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName)
-                                                  .Take(10)
-                                                  .ToArray())
-                                                  .Replace(' ', '-');
-                imageName = $"{imageName}{DateTime.UtcNow.ToString("yymmss")}{Path.GetExtension(imageFile.FileName)}";
-
-                var awsOptions = new AmazonS3Config
-                {
-                    RegionEndpoint = Amazon.RegionEndpoint.USEast2,
-                };
-                var awsCredentials = new BasicAWSCredentials(AWSKeys.ACCESS_KEY, AWSKeys.SECRET_KEY);
-
-                using (var client = new AmazonS3Client(awsCredentials, awsOptions))
-                {
-                    using (var stream = imageFile.OpenReadStream())
-                    {
-                        var request = new PutObjectRequest
-                        {
-                            BucketName = bucktName,
-                            Key = imageName,
-                            InputStream = stream,
-                            ContentType = imageFile.ContentType,
-                        };
-
-                        request.CannedACL = S3CannedACL.PublicRead;
-
-                        var response = await client.PutObjectAsync(request);
-                    }
-                }
-
-                return imageName;
+                await imageFile.CopyToAsync(fileStream);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            return imageName;
         }
 
         [NonAction]
         public async Task DeleteImage(string imageName)
         {
-            var awsOptions = new AmazonS3Config
-            {
-                RegionEndpoint = Amazon.RegionEndpoint.USEast2,
-            };
-            var awsCredentials = new BasicAWSCredentials(AWSKeys.ACCESS_KEY, AWSKeys.SECRET_KEY);
 
-            using (var client = new AmazonS3Client(awsCredentials, awsOptions))
-            {
-                var bucketExists = await AmazonS3Util.DoesS3BucketExistV2Async(client, bucktName);
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, @"Resources/images", imageName);
+            if (System.IO.File.Exists(imagePath))
+                System.IO.File.Delete(imagePath);
 
-                if (bucketExists)
-                {
-                    var deleteRequest = new DeleteObjectRequest
-                    {
-                        BucketName = bucktName,
-                        Key = imageName,
-                    };
-
-                    client.DeleteObjectAsync(deleteRequest).Wait();
-                }
-            }
         }
 
         [HttpDelete("DeletarUsuario/{id}")]

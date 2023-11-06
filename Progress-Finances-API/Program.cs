@@ -77,6 +77,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors();
 
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources")),
+    RequestPath = new PathString("/Resources")
+});
+
 app.MapControllers();
 
 

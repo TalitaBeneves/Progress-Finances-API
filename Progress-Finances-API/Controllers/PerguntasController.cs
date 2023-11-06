@@ -25,7 +25,7 @@ namespace Progress_Finances_API.Controllers
 
             if (idUsuario == null) return BadRequest($"IdUsuario não pode ser null");
 
-            var perguntas = await _dc.perguntas.Where(u => u.Usuario_Id == idUsuario).ToListAsync();
+            var perguntas = await _dc.perguntas.Where(u => u.IdUsuario == idUsuario).ToListAsync();
 
 
 
@@ -38,7 +38,7 @@ namespace Progress_Finances_API.Controllers
         {
             if (idUsuario == null) return BadRequest($"IdUsuario não pode ser null");
 
-            var perguntas = await _dc.perguntas.Where(u => u.Usuario_Id == idUsuario && u.Ativo == true).ToListAsync();
+            var perguntas = await _dc.perguntas.Where(u => u.IdUsuario == idUsuario && u.Ativo == true).ToListAsync();
 
             return Ok(perguntas);
         }
@@ -69,7 +69,7 @@ namespace Progress_Finances_API.Controllers
         {
             try
             {
-                var pergunta = await _dc.perguntas.AsNoTracking().FirstOrDefaultAsync(u => u.Pergunta_Id == p.Pergunta_Id);
+                var pergunta = await _dc.perguntas.AsNoTracking().FirstOrDefaultAsync(u => u.IdPergunta == p.IdPergunta);
                 if (pergunta == null) throw new InvalidOperationException("Id não encontrado");
 
                 pergunta.Ativo = p.Ativo;
@@ -110,7 +110,7 @@ namespace Progress_Finances_API.Controllers
         [HttpPut("habilitaDesabilitaPergunta")]
         public async Task<ActionResult> habilitaDesabilitaPergunta(int IdPergunta, int IdUsuario, bool ativo)
         {
-            var request = await _dc.perguntas.FirstOrDefaultAsync(id => id.Usuario_Id == IdUsuario && id.Pergunta_Id == IdPergunta);
+            var request = await _dc.perguntas.FirstOrDefaultAsync(id => id.IdUsuario == IdUsuario && id.IdPergunta == IdPergunta);
 
             if (request == null)
             {
