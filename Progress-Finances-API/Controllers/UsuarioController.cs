@@ -107,6 +107,32 @@ namespace Progress_Finances_API.Controllers
             }
         }
 
+        [HttpPut("RedefinirSenha")]
+        [AllowAnonymous]
+        public async Task<ActionResult> RedefinirSenha([FromBody] RedefinirSenha user)
+        {
+            try
+            {
+                var usuario = await _dc.usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Email == user.Email);
+                if (usuario == null) throw new InvalidOperationException("Id não encontrado");
+
+                if (usuario.Email == user.Email)
+                {
+                    usuario.Senha = user.NovaSenha;
+
+                    _dc.usuarios.Update(usuario);
+                    await _dc.SaveChangesAsync();
+                }
+
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro ao redefinir usuário: {ex.Message}");
+            }
+        }
+
+
         [HttpPost("upload-image/{idUsuario}")]
         public async Task<ActionResult> AtualizarImagem(int idUsuario)
         {

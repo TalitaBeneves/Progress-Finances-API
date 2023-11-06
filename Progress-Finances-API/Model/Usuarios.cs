@@ -37,4 +37,11 @@ namespace Progress_Finances_API.Model
         public string NovaSenha { get; set; }
         public string Email { get; set; }
     }
+    public class RedefinirSenha
+    {
+        [Key]
+        public int IdUsuario { get; set; }
+        public string NovaSenha { get; set; }
+        public string Email { get; set; }
+    }
 }
