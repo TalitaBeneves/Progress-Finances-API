@@ -30,15 +30,13 @@ namespace Progress_Finances_API.Services
             var mail = new MailMessage();
             mail.From = new MailAddress(Email);
             if (validarEmail(emailTo))
-                 mail.To.Add(emailTo);
-            
+                mail.To.Add(emailTo);
+
             mail.Subject = subject;
             mail.Body = body;
             mail.IsBodyHtml = true;
 
-
             return mail;
-
         }
 
         private bool validarEmail(string email)
