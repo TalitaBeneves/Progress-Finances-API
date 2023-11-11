@@ -44,6 +44,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<TokenAuth>();
+builder.Services.AddScoped<RedefinicaoDeSenha>();
 
 var tokenKey = Encoding.ASCII.GetBytes(Configuration.ChavePrivada);
 builder.Services.AddAuthentication(options =>
