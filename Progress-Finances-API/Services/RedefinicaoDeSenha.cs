@@ -76,7 +76,7 @@ namespace Progress_Finances_API.Services
             //5 - gera o token
 
             int geraToken = random?.Next(1000, 10000) ?? 0;
-            var token= geraToken.ToString().Substring(0, 4);
+            var token = geraToken.ToString().Substring(0, 4);
 
             //6 - salva no banco
             var db = _dc.usuarios.FirstOrDefault(u => u.Email == email);
@@ -88,14 +88,16 @@ namespace Progress_Finances_API.Services
             }
 
             //7 - envia o token gerado para o email
-            EnviarEmail(email);
+            EnviarEmail(email, token);
 
             return token;
         }
 
-        public string EnviarEmail(string email)
+        public string EnviarEmail(string email, string token)
         {
-            var enviarTokenPorEmail = new EmailService("smtp.gmail.com", EnvioDeEmailProp.Email, EnvioDeEmailProp.Senha);
+
+            //AO INVES DISSO TENTE INJETAR O EMAILSERVICE NO CONTRUTOR E CHAMAR O SENEMAIL PASSANDO OS PARAMETROS DESEJADOS
+            var enviarTokenPorEmail = new EmailService("smtp.gmail.com", EnvioDeEmailProp.Email, EnvioDeEmailProp.Senha, token);
             enviarTokenPorEmail.SendEmail(email, "Redefinição de Senha", "template do token"); //adicionar o template do token
 
             return "Ok";

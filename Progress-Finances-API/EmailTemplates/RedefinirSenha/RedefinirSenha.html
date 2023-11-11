@@ -1,10 +1,80 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&display=swap"
+          rel="stylesheet" />
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .container {
+            margin: auto 296px;
+        }
+
+        h1 {
+            background-color: #071f40;
+            padding: 10px;
+            margin: 0px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #ffff;
+        }
+
+        section {
+            padding: 5px;
+            background-color: #cec6c6;
+        }
+
+        p:first-of-type {
+            margin-top: 20px;
+        }
+
+        p {
+            padding: 5px;
+            margin-top: 5px;
+            font-size: 20px;
+        }
+
+        b {
+            padding: 5px;
+            font-size: 18px;
+        }
+
+        li {
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
-       <p>Envio de token para redefinição de senha</p>
+    <div class="container">
+        <div>
+            <h1>Progress finances</h1>
+        </div>
+        <section>
+            <p>
+                Olá, <br />
+                Código de segurança: {{token}} <br />
+                Código válido por 10 minutos.
+            </p>
+            <p>
+                Retorne para a jornada de autenticação e insira o código acima. Após
+                essa validação, você será direcionado à sua área logada.
+            </p>
+            <hr />
+            <p>
+                Mas, se por acaso, não foi você que pediu qualquer tipo de alteração
+                de senha em nosso sistema, recomendamos, por segurança, que você
+                altere imediatamente sua senha de acesso.
+            </p>
+        </section>
+    </div>
 </body>
 </html>

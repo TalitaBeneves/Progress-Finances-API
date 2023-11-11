@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Components.Web.Virtualization;
+using System.Net;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
@@ -6,17 +7,19 @@ namespace Progress_Finances_API.Services
 {
     public class EmailService
     {
-        public EmailService(string provedor, string email, string senha)
+        public EmailService(string provedor, string email, string senha, string? token)
         {
             Provedor = provedor;
             Email = email;
             Senha = senha;
+            Token = token;
         }
 
         public string Provedor { get; private set; }
         public string Email { get; set; }
         public string Senha { get; set; }
-
+        //public string? token { get; set; }
+        public string? Token { get; set; }
 
         public void SendEmail(string emailTo, string subject, string body)
         {
@@ -33,7 +36,12 @@ namespace Progress_Finances_API.Services
                 mail.To.Add(emailTo);
 
             mail.Subject = subject;
-            mail.Body = body;
+
+            if (Token != null)
+                mail.Body = teste(Token);
+            else
+                mail.Body = body;
+
             mail.IsBodyHtml = true;
 
             return mail;
@@ -61,6 +69,16 @@ namespace Progress_Finances_API.Services
             smtp.Credentials = new NetworkCredential(Email, Senha);
             smtp.Send(message);
             smtp.Dispose();
+        }
+
+        private string teste(string texto)
+        {
+            if (!string.IsNullOrEmpty(texto))
+            {
+               texto = texto.Replace("{{token}}", texto);
+            }
+
+            return texto;
         }
     }
 

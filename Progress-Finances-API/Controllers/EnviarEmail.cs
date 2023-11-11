@@ -25,7 +25,7 @@ namespace Progress_Finances_API.Controllers
                 htmlBody = streamReader.ReadToEnd();
             }
 
-            var gmail = new EmailService("smtp.gmail.com", EnvioDeEmailProp.Email, EnvioDeEmailProp.Senha);
+            var gmail = new EmailService("smtp.gmail.com", EnvioDeEmailProp.Email, EnvioDeEmailProp.Senha, null);
             gmail.SendEmail(emailTo: email.EmailTo, subject: email.Subject, body: htmlBody);
 
             return Ok("Sucesso ao enviar e-mail");
