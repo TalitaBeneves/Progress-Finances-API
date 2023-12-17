@@ -84,7 +84,7 @@ namespace Progress_Finances_API.Controllers
                 ValorTotalInvestido = ativo.ValorTotalInvestido,
                 SugestaoInvestimento = ativo.SugestaoInvestimento,
                 ValorAtualDoAtivo = ativo.ValorAtualDoAtivo,
-                PerguntasMarcadas = ativo.PerguntasMarcadas.Select(p => new PerguntasChecked
+                PerguntasMarcadas = ativo.PerguntasMarcadas?.Select(p => new PerguntasChecked
                 {
                     AtivoId = p.AtivoId,
                     Checked = p.Checked,
@@ -108,12 +108,8 @@ namespace Progress_Finances_API.Controllers
 
             request.Nome = ativo.Nome;
             request.LocalAlocado = ativo.LocalAlocado;
-            request.Nota = ativo.Nota;
             request.QtdAtivos = ativo.QtdAtivos;
-            request.SugestaoInvestimento = ativo.SugestaoInvestimento;
-            request.Tipo = ativo.Tipo;
             request.ValorAtualDoAtivo = ativo.ValorAtualDoAtivo;
-            request.ValorTotalInvestido = ativo.ValorTotalInvestido;
 
             _dc.ativos.Update(request);
             await _dc.SaveChangesAsync();
@@ -124,7 +120,7 @@ namespace Progress_Finances_API.Controllers
         [HttpDelete("Deletar/{idAtivo}")]
         public async Task<ActionResult> ExcluirAtivo(int idAtivo)
         {
-            if (idAtivo == null) return BadRequest("Ativo está null");
+            if (idAtivo == 0) return BadRequest("Ativo está null");
 
             var delet = await _dc.ativos.FirstOrDefaultAsync(i => i.IdAtivo == idAtivo);
             if (delet == null)
