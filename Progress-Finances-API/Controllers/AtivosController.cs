@@ -47,7 +47,29 @@ namespace Progress_Finances_API.Controllers
             _dc.ativos.Add(ativo);
             await _dc.SaveChangesAsync();
 
-            return Created("Ativo criado com sucesso!", ativo); ;
+            var montaObj = new Ativos
+            {
+                ChekedParaCalculo = ativo.ChekedParaCalculo,
+                IdAtivo = ativo.IdAtivo,
+                IdUsuario = ativo.IdUsuario,
+                LocalAlocado = ativo.LocalAlocado,
+                Nome = ativo.Nome,
+                Nota = ativo.Nota,
+                QtdAtivos = ativo.QtdAtivos,
+                Tipo = ativo.Tipo,
+                ValorTotalInvestido = ativo.ValorTotalInvestido,
+                SugestaoInvestimento = ativo.SugestaoInvestimento,
+                ValorAtualDoAtivo = ativo.ValorAtualDoAtivo,
+                PerguntasMarcadas = ativo.PerguntasMarcadas.Select(p => new PerguntasChecked
+                {
+                    AtivoId = p.AtivoId,
+                    Checked = p.Checked,
+                    Descricao= p.Descricao,
+                    IdPergunta = p.IdPergunta,
+                }).ToList()
+            };
+
+            return Created("Ativo criado com sucesso!", montaObj); ;
         }
 
         [HttpPut("EditarAtivo")]

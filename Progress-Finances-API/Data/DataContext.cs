@@ -10,6 +10,9 @@ namespace Progress_Finances_API.Data
         public DbSet<Usuarios> usuarios { get; set; }
         public DbSet<Perguntas> perguntas { get; set; }
         public DbSet<Ativos> ativos { get; set; }
+        public DbSet<PerguntasChecked> perguntasChecked { get; set; }
         public DbSet<MetaInvestimentos> meta { get; set; }
     }
+
+
 }

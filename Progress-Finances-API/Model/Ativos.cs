@@ -16,5 +16,17 @@ namespace Progress_Finances_API.Model
         public decimal ValorAtualDoAtivo { get; set; }
         public TipoAtivo Tipo { get; set; }
         public bool? ChekedParaCalculo { get; set; }
+
+        public List<PerguntasChecked>? PerguntasMarcadas { get; set; }
+    }
+
+    public class PerguntasChecked
+    {
+        [Key]
+        public int IdPergunta { get; set; }
+        public string Descricao { get; set; }
+        public bool Checked { get; set; }
+        public int AtivoId { get; set; }
+        public Ativos Ativo { get; set; }
     }
 }
