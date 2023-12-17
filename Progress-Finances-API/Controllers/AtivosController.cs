@@ -23,13 +23,37 @@ namespace Progress_Finances_API.Controllers
         public async Task<ActionResult> LitarAtivosById(int idUsuario)
         {
 
-            if (idUsuario == null) return BadRequest("IdUsuario está null");
+            if (idUsuario == 0) return BadRequest("IdUsuario está null");
 
-            var listAtivos = await _dc.ativos.Where(id => id.IdUsuario == idUsuario).ToListAsync();
+            var listAtivos = await _dc.ativos.Where(ativo => ativo.IdUsuario == idUsuario)
+                                             .Include(ativo => ativo.PerguntasMarcadas)
+                                             .ToListAsync();
 
             if (listAtivos == null) return BadRequest("Dados não encontrados.");
 
-            return Ok(listAtivos);
+            var montaObj = listAtivos.Select(ativo => new Ativos
+            {
+                ChekedParaCalculo = ativo.ChekedParaCalculo,
+                IdAtivo = ativo.IdAtivo,
+                IdUsuario = ativo.IdUsuario,
+                LocalAlocado = ativo.LocalAlocado,
+                Nome = ativo.Nome,
+                Nota = ativo.Nota,
+                QtdAtivos = ativo.QtdAtivos,
+                Tipo = ativo.Tipo,
+                ValorTotalInvestido = ativo.ValorTotalInvestido,
+                SugestaoInvestimento = ativo.SugestaoInvestimento,
+                ValorAtualDoAtivo = ativo.ValorAtualDoAtivo,
+                PerguntasMarcadas = ativo.PerguntasMarcadas.Select(p => new PerguntasChecked
+                {
+                    AtivoId = p.AtivoId,
+                    Checked = p.Checked,
+                    Descricao = p.Descricao,
+                    IdPergunta = p.IdPergunta,
+                }).ToList()
+            }).ToList();
+
+            return Ok(montaObj);
         }
 
 
@@ -64,7 +88,7 @@ namespace Progress_Finances_API.Controllers
                 {
                     AtivoId = p.AtivoId,
                     Checked = p.Checked,
-                    Descricao= p.Descricao,
+                    Descricao = p.Descricao,
                     IdPergunta = p.IdPergunta,
                 }).ToList()
             };
