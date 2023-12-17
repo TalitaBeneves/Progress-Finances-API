@@ -44,7 +44,7 @@ namespace Progress_Finances_API.Controllers
                 ValorTotalInvestido = ativo.ValorTotalInvestido,
                 SugestaoInvestimento = ativo.SugestaoInvestimento,
                 ValorAtualDoAtivo = ativo.ValorAtualDoAtivo,
-                PerguntasMarcadas = ativo.PerguntasMarcadas.Select(p => new PerguntasChecked
+                PerguntasMarcadas = ativo.PerguntasMarcadas?.Select(p => new PerguntasChecked
                 {
                     AtivoId = p.AtivoId,
                     Checked = p.Checked,
