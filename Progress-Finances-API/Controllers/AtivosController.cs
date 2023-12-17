@@ -122,12 +122,21 @@ namespace Progress_Finances_API.Controllers
         {
             if (idAtivo == 0) return BadRequest("Ativo está null");
 
-            var delet = await _dc.ativos.FirstOrDefaultAsync(i => i.IdAtivo == idAtivo);
+            var delet = await _dc.ativos.Include(a => a.PerguntasMarcadas).FirstOrDefaultAsync(i => i.IdAtivo == idAtivo);
+
             if (delet == null)
                 return BadRequest("Não foi encontrado nenhum ativo com esse id");
             else
             {
-                _dc.ativos.Remove(delet); ;
+                if (delet.PerguntasMarcadas != null)
+                {
+                    foreach (var pergunta in delet.PerguntasMarcadas)
+                    {
+                        _dc.perguntasChecked.Remove(pergunta);
+                    }
+                }
+
+                _dc.ativos.Remove(delet);
                 await _dc.SaveChangesAsync();
 
                 return Ok();
